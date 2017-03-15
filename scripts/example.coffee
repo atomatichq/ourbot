@@ -27,7 +27,7 @@ module.exports = (robot) ->
   robot.hear /\+todo/i, (res) ->
     if res.message.text.indexOf(' ')+1
       addRowDoc({"action": " +todo","timestamp": new Date().toLocaleString(),"poster": res.message.user.name,"assignees": "mm","message": res.message.text.substr(res.message.text.indexOf(' ')+1)})
-      console.log(res)
+      console.log(res.envelope.message.user)
       res.send ""+res.message
     else
       res.send "No parameter specified"
