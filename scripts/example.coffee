@@ -26,12 +26,14 @@ module.exports = (robot) ->
 
   robot.hear /\+todo/i, (res) ->
     messageText = res.message.text.indexOf(' ')+1
-    assignees = res.message.text.substr(messageText).match(/(@.*\s)/)[0].trim()
+    assignees = res.message.text.substr(messageText).match(/(@.*\s)/)
     if !assignees
       assignees = "none"
+    else
+      assignees = assignees[0].trim()
     if messageText
       addRowDoc({"action": " +todo", "timestamp": new Date().toLocaleString(), "poster": res.message.user.name, "assignees": assignees, "message": res.message.text.substr(messageText)})
-      res.send "Todo saved with text: " + res.message.text.indexOf(' ')+1
+      res.send "Todo saved with text: " + res.message.text.substr(messageText)
     else
       res.send "No parameter specified"
       # data = JSON.stringify({
