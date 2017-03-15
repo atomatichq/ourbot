@@ -26,8 +26,7 @@ module.exports = (robot) ->
 
   robot.hear /\+todo/i, (res) ->
     if res.message.text.indexOf(' ')+1
-      addRowDoc({"action": " +todo","timestamp": new Date().toLocaleString(),"poster": res.message.user.name,"assignees": res.message.text.substr(res.message.text.indexOf(' ')+1).match('/(@.*/\s)/')[0].trim() ,"message": res.message.text.substr(res.message.text.indexOf(' ')+1)})
-      console.log(res.envelope.message.user)
+      addRowDoc({"action": " +todo","timestamp": new Date().toLocaleString(),"poster": res.message.user.name,"assignees": (res.message.text.substr(res.message.text.indexOf(' ')+1).match(/(@.*\s)/))[0].trim() ,"message": res.message.text.substr(res.message.text.indexOf(' ')+1)})
       res.send ""+res.message
     else
       res.send "No parameter specified"
@@ -124,6 +123,8 @@ module.exports = (robot) ->
     res.send 'OK'
 
   robot.error (err, res) ->
+
+    console.log(err)
     robot.logger.error "DOES NOT COMPUTE"
 
     if res?
