@@ -26,7 +26,7 @@ module.exports = (robot) ->
 
   robot.hear /\+todo/i, (res) ->
     messageText = res.message.text.indexOf(' ')+1
-    assignees = res.message.text.substr(messageText).match(/(@.*\s)/))[0].trim()
+    assignees = res.message.text.substr(messageText).match(/(@.*\s)/)[0].trim()
     if !assignees
       assignees = "none"
     if messageText
