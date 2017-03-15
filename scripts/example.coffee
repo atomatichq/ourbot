@@ -25,9 +25,10 @@ module.exports = (robot) ->
     doc.addRow('od6', data, (err, info) -> console.log(err))
 
   robot.hear /\+todo/i, (res) ->
-    if res.message.text.indexOf(' ')+1
-      addRowDoc({"action": " +todo","timestamp": new Date().toLocaleString(),"poster": res.message.user.name,"assignees": (res.message.text.substr(res.message.text.indexOf(' ')+1).match(/(@.*\s)/))[0].trim() ,"message": res.message.text.substr(res.message.text.indexOf(' ')+1)})
-      res.send ""+res.message
+    messageText = res.message.text.indexOf(' ')+1
+    if messageText
+      addRowDoc({"action": " +todo","timestamp": new Date().toLocaleString(),"poster": res.message.user.name,"assignees": (res.message.text.substr(messageText).match(/(@.*\s)/))[0].trim() ,"message": res.message.text.substr(messageText)})
+      res.send "Todo saved with text: " + res.message.text.indexOf(' ')+1
     else
       res.send "No parameter specified"
       # data = JSON.stringify({
