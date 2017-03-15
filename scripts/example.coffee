@@ -26,7 +26,7 @@ module.exports = (robot) ->
 
   robot.hear /\+todo/i, (res) ->
     if res.message.text.indexOf(' ')+1
-      addRowDoc({"action": "&#43;todo","timestamp": Date.now(),"poster": "whos","assignees": "mm","message": res.message.text.substr(res.message.text.indexOf(' ')+1)})
+      addRowDoc({"action": " +todo","timestamp": Date.now(),"poster": res.message.user.name,"assignees": "mm","message": res.message.text.substr(res.message.text.indexOf(' ')+1)})
       console.log(res)
       res.send ""+res.message
     else
