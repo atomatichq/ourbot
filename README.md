@@ -127,4 +127,19 @@ For standup doc (dates should be in reverse order - i.e. most recent item first)
 
 {message}
 ```
->>>>>>> 6a5cbb32aef34614cfc19c24534c7d3965cb05f2
+
+# How to run 
+In example.coffee you need to define next things:
+```
+doc = new GoogleSpreadsheet(<spreadSheetId>)
+
+creds = {
+    "client_email": "<EmailOfYourAPIKey>",
+    "private_key": "<YourPrivateKey>"}
+
+doc.addRow('<WorkingSheetWithWhichYouWantToInteract>' data, (err, info)
+```
+Inside Procfile you need to insert your GITTER_APIKEY
+```
+HUBOT_GITTER2_TOKEN=<YourKey> bin/hubot -a gitter2 --name ourbot
+```
