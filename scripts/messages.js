@@ -32,15 +32,16 @@ var sendMessage = function (message) {
 
 var formatMessage = function (message) {
     var messageText = message.text.indexOf(' ')+1
+    var msg = message.text.substr(messageText)
     if (!messageText) return null
     var assignees = message.text.substr(messageText).match(/@[^*\s]+/)
     if (!assignees)
       assignees = "none"
     else {
       assignees = assignees[0].trim()
-      message.replace(assignees, '').trim()
+      msg = message.text.substr(messageText).replace(assignees, '').trim()
     }
-    
+
     var name = message.user.name.substr(0, message.user.name.indexOf(' '))
 
     return {
@@ -48,7 +49,7 @@ var formatMessage = function (message) {
         "timestamp": new Date().toISOString(),
         "poster": "@" + message.user.login + " ("+ name +")",
         "assignees": assignees,
-        "message": message.text.substr(messageText)
+        "message": msg
     }
 }
 
