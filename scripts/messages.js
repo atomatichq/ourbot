@@ -39,12 +39,12 @@ var formatMessage = function (message) {
     else
       assignees = assignees[0].trim()
 
-    var name = message.user.name.substr(0, message.user.name.indexOf(' ')-1)
+    var name = message.user.name.substr(0, message.user.name.indexOf(' '))
 
     return {
         "action": message.text.substr(1, messageText-2),
         "timestamp": new Date().toISOString(),
-        "poster": "@" + message.user.login + " "+ name,
+        "poster": "@" + message.user.login + " ("+ name +")",
         "assignees": assignees,
         "message": message.text.substr(messageText)
     }
