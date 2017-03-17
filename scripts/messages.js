@@ -12,7 +12,6 @@ var setAuth = function () {
         },
         function getInfoAndWorksheets(step) {
             doc.getInfo(function(err, info) {
-                console.log(info);
                 worksheetinfo = info
             });
         }
@@ -22,7 +21,6 @@ var setAuth = function () {
 
 var sendMessage = function (message) {
     var messageObj = formatMessage(message)
-    console.log(message)
     if (messageObj) {
         doc.addRow(worksheetinfo.worksheets[0].id, messageObj, function (err, info) {
             if (err) console.log(err)
