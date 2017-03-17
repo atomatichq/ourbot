@@ -39,7 +39,7 @@ var formatMessage = function (message) {
     else
       assignees = assignees[0].trim()
 
-    var name = message.user.name.substr(message.user.name.indexOf(' ')+1)
+    var name = message.user.name.substr(0, message.user.name.indexOf(' ')-1)
 
     return {
         "action": message.text.substr(1, messageText-2),
