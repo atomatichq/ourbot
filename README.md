@@ -162,6 +162,7 @@ HUBOT_GITTER2_TOKEN=<APIKEY which you get in previous step> bin/hubot -a gitter2
 ```
 2. Also you need to specify workingsheet for google docs:
     * Open or create google document
+      * Format your document with next columns: action, timestamp, poster, assignees, message
     * Look at URL and find this one section:
     * https://docs.google.com/spreadsheets/d/**15dxhLpRnc1_weGE2rdfSYx7FpQfakbSXrh93cMRIuwsFow**/edit#gid=0
     * Set it in config file as: ``` "workSheet": "15dxhLpRnc1_weGE2rdfSYx7FpQfakbSXrh93cMRIuwsFow" ```
