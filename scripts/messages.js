@@ -33,12 +33,12 @@ var sendMessage = function (message) {
 var formatMessage = function (message) {
     var messageText = message.text.indexOf(' ')+1
     if (!messageText) return null
-    var assignees = message.text.substr(messageText).match(/(@.*\s)/)
+    var assignees = message.text.substr(messageText).match(/@[^*\s]+/)
     if (!assignees)
       assignees = "none"
     else
       assignees = assignees[0].trim()
-
+    console.log(assignees)
     var name = message.user.name.substr(0, message.user.name.indexOf(' '))
 
     return {
