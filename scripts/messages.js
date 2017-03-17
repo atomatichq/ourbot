@@ -36,9 +36,11 @@ var formatMessage = function (message) {
     var assignees = message.text.substr(messageText).match(/@[^*\s]+/)
     if (!assignees)
       assignees = "none"
-    else
+    else {
       assignees = assignees[0].trim()
-    console.log(assignees)
+      message.replace(assignees, '').trim()
+    }
+    
     var name = message.user.name.substr(0, message.user.name.indexOf(' '))
 
     return {
