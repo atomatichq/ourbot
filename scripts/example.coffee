@@ -10,32 +10,30 @@
 
 module.exports = (robot) ->
 
-  GoogleSpreadsheet = require('google-spreadsheet')
-  async = require('async')
-  doc = new GoogleSpreadsheet('15dxhLpRnc1_g2nWISYx7FpQfakbSXrh93cMRIuwsFow')
-  creds = {
-    "client_email": "941963576311-compute@developer.gserviceaccount.com","private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDQwgYKPQLZmIKv\nnTpkplIIdfUPYs6BfLw8BZ6PBrLEUmh8zhAaVY4MHIHojd9flj72VOKY8heaFL4X\n0ifXXD+SnvOwsK1Dw/03DqlcuL6wHZGrKmHP+32aRMWEIsu0NaMAaxiBIglGOk8i\nl6o0EYwzRCpwXqIITF6C/CGSsjOtr4csx+3OMlpUXGoNh3i1VaEX59Ok6r/3Zj6N\ndxRJbAQOx7wctjKF37J6NWA41Qa/j7TI5kQcNmCkg2Wvns8/aS+v8VnxHiArzaFK\nsENmvgYWdpUM+sdwaTv7CPre/UnJRhhtqZmLpa2XduOUFkgUpwrH3C7MYehhtgU4\nMJpt+nH7AgMBAAECggEBAM0nwHPTXbemT9hyNe6wHTI/aiRCwBs1EHAUPazlsk2J\nhzIP+HdI2R5B7dEzi/AOYbYH2eDhGhzMgbw7Rfg5qihXmbltB/nu5Cx1di+vR4cg\nqAWE0zdoOhmfuFSRNYvWomhI134giui/aQHf9t7Q1+2R8fsYpThuhPtI+V2HT45B\nib5Cf8GenOl0k73cZVPMSrs1uDdwI3uVrAWgpjBYYvtXXhohQM3RWcCnbvPqzlzb\n2vNu3UsdpPr7xQ81G5fi+a6JbSlcCp/oqqbcCJpSX0QjWEdmMVBXGmY9KJAIJjyI\nyCC3pPMtdY6jCdjfsc5NsrWqbP2r9l9LUCzNYrZ1dWECgYEA6E/Sf339lcqaZVV7\nlY1Az8X9b4QlOhvLLuN3wnyi2JRjbCAK9Fa3RH2HfEbCiMAi/uPP6dD0aO3Vqtni\n3c3UKKYNR6IwwtnDpKXLIlNEWxbv+H6o4YTk6aEKjcUpGzte0pDWj0Nd+e/uhiq2\nmP0sHBgaVr9jYQb2gA55+C7Z84kCgYEA5gtcAQ/YTd3dyhriBSn/qWg8dvrTrWp+\noIw5OZTj3f6lv2DcIxJpYyTP2j/sX3TzQfwqaBYopdq4EGh7iFSclNAuOe8M9Mio\nSNGbz/0yWqA/b/jHV5zUk93W15KcnQC/LjsDBGNxMAp8js+C/Dv+muJ8oePT3Pt1\nN7fACDdiJGMCgYAf5UW7Z2r3s/d6zj/HirtJS5++PeB2l/ZPm7+HnmElZ0o3QDcA\n0R8ccje14mk3KVoksNaM/blw5qadbIjvdyEX66SLH0OenRN1eaXoMpKCByYvcgRx\n4jMjuI6gZF9+c6pTMruis9clR8Hx/c9QNgJmYRDMtD5Kxg/2CQbKAnS+MQKBgQCW\nZ/zqkNKK7rHRL0xxtej7eTR3Uj3OF1/dVnEfzdJCVflGrGyh3arb8LiZaMwCCXP2\nw4lybnJ7JgrMZ5PFKhUKUya2KC7faMZmfe2Symf+yuFPM2gaR2bRmuyaG7icCl31\nOw4Y82+Qynpv4QsyIYOw/r4gFtZxmFMmb9R1Ssi3IwKBgQCFMxtxnmn11S26YF5v\nFr+KUMIXx6uSTvEL2jBygJ1J6MKDudSWgHJbkrNcu7oE9wMzeJjoE6XpSkOfQxWX\nUekD0aXEED97ZiLTGdLksk5qSX7ARywexdo8564F1ol/Qhsh/uxksTMORJssc+fs\naARDTj9kcn4YDgdytfq8PLue6w==\n-----END PRIVATE KEY-----\n"}
+  messages = require('./messages.js').messages
+  messages.setAuth()
 
-  setAuth = () ->
-    		doc.useServiceAccountAuth(creds, (err) -> console.log(err))
-
-  setAuth()
-
-  addRowDoc = (data) ->
-    doc.addRow('od6', data, (err, info) -> console.log(err))
+  # setAuth = () ->
+  #   		doc.useServiceAccountAuth(creds, (err) -> console.log(err))
+  #
+  # setAuth()
+  #
+  # addRowDoc = (data) ->
+  #   doc.addRow('od6', data, (err, info) -> console.log(err))
 
   robot.hear /\+todo/i, (res) ->
-    messageText = res.message.text.indexOf(' ')+1
-    assignees = res.message.text.substr(messageText).match(/(@.*\s)/)
-    if !assignees
-      assignees = "none"
-    else
-      assignees = assignees[0].trim()
-    if messageText
-      addRowDoc({"action": " +todo", "timestamp": new Date().toLocaleString(), "poster": res.message.user.name, "assignees": assignees, "message": res.message.text.substr(messageText)})
-      res.send "Todo saved with text: " + res.message.text.substr(messageText)
-    else
-      res.send "No parameter specified"
+      messages.sendMessage(res.message)
+    # messageText = res.message.text.indexOf(' ')+1
+    # assignees = res.message.text.substr(messageText).match(/(@.*\s)/)
+    # if !assignees
+    #   assignees = "none"
+    # else
+    #   assignees = assignees[0].trim()
+    # if messageText
+    #   addRowDoc({"action": " +todo", "timestamp": new Date().toLocaleString(), "poster": res.message.user.name, "assignees": assignees, "message": res.message.text.substr(messageText)})
+    #   res.send "Todo saved with text: " + res.message.text.substr(messageText)
+    # else
+    #   res.send "No parameter specified"
       # data = JSON.stringify({
       #   "description": "TODO",
       #   "public": true,

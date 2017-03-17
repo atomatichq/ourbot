@@ -1,0 +1,58 @@
+import GoogleSpreadsheet from 'google-spreadsheet';
+import * as creds from '../config.json';
+import async from 'async';
+
+let doc = new GoogleSpreadsheet(creds.workSheet)
+let worksheetinfo
+
+var setAuth = function () {
+    async.series([
+        function setAuth(step) {
+            doc.useServiceAccountAuth(creds, step);
+        },
+        function getInfoAndWorksheets(step) {
+            doc.getInfo(function(err, info) {
+                console.log(info);
+                worksheetinfo = info
+            });
+        }
+    ]);
+    return worksheetinfo
+}
+
+var sendMessage = function (message) {
+    var messageObj = formatMessage(message)
+    console.log(message)
+    if (messageObj) {
+        doc.addRow(worksheetinfo.worksheets[0].id, messageObj, function (err, info) {
+            if (err) console.log(err)
+            return "Got it!"
+        })
+    }
+    return "Specify parameters"
+}
+
+var formatMessage = function (message) {
+    var messageText = message.text.indexOf(' ')+1
+    if (!messageText) return null
+    var assignees = message.text.substr(messageText).match(/(@.*\s)/)
+    if (!assignees)
+      assignees = "none"
+    else
+      assignees = assignees[0].trim()
+
+    var name = message.user.name.substr(message.user.name.indexOf(' ')+1)
+
+    return {
+        "action": message.text.substr(1, messageText-2),
+        "timestamp": new Date().toISOString(),
+        "poster": "@" + message.user.login + " "+ name,
+        "assignees": assignees,
+        "message": message.text.substr(messageText)
+    }
+}
+
+exports.messages = {
+    setAuth: setAuth,
+    sendMessage: sendMessage
+};
