@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+    - "node"
+install:
+    - npm install
+script:
+    - mocha --require coffee-script/register --compilers coffee:coffee-scrip --compilers js:babel-core/register test/*.js
