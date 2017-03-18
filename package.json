@@ -10,6 +10,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.24.0",
     "babel-register": "^6.24.0",
+    "chai": "^3.5.0",
     "coffee-script": "^1.6.3",
     "google-spreadsheet": "^2.0.3",
     "hubot": "^2.19.0",
