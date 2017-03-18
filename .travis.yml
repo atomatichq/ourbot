@@ -3,6 +3,7 @@ node_js:
     - "node"
 install:
     - npm install
-    - npm install -g coffee-script
+    - npm install coffee-script
+    - npm install chai
 script:
     - mocha --require coffee-script/register --compilers coffee:coffee-scrip --compilers js:babel-core/register test/*.js
