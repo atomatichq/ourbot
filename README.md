@@ -1,4 +1,5 @@
 ChatOps Bot for our Gitter Chat Channel
+[![Build Status](https://travis-ci.com/weirdGuy/gitterbot.svg?token=eKyEegu8wsqS6HDsxeah&branch=master)](https://travis-ci.com/weirdGuy/gitterbot)
 =======================================
 
 We want a Hubot-based bot to automate logging of specific messages from our gitter chat channel. We want messages logged to a document in google docs or a gist. Tags are like +todo or +standup.
