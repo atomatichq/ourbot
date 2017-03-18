@@ -13,12 +13,10 @@ var setAuth = function () {
         function getInfoAndWorksheets(step) {
             doc.getInfo(function(err, info) {
                 worksheetinfo = info
-                step(null, worksheetinfo)
+                step()
             });
         },
-    ],
-    function(err, results) {
-    });
+    ]);
 }
 
 var sendMessage = function (message) {
