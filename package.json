@@ -29,6 +29,7 @@
     "node": "0.10.x"
   },
   "devDependencies": {
+    "coffee-script": "^1.6.3",
     "hubot-test-helper": "^1.5.1",
     "mocha": "^3.2.0"
   }
