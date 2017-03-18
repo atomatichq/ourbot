@@ -18,7 +18,6 @@ var setAuth = function () {
         },
     ],
     function(err, results) {
-        console.log(results)
     });
 }
 
