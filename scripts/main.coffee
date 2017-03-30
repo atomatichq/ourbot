@@ -10,6 +10,7 @@
 
 module.exports = (robot) ->
 
+  console.log(process.env.private_key)
   messages = require('./messages.js').messages
   messages.setAuth((err, res) ->
     if(err) console.log(err)
