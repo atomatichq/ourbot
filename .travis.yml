@@ -6,4 +6,4 @@ install:
     - npm install coffee-script
     - npm install chai
 script:
-    - mocha --require coffee-script/register --compilers coffee:coffee-scrip --compilers js:babel-core/register test/*.js
+    - mocha --require coffee-script/register --compilers coffee:coffee-script --compilers js:babel-core/register test/*.js
