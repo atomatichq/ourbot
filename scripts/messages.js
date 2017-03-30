@@ -1,5 +1,4 @@
 import GoogleSpreadsheet from 'google-spreadsheet';
-import * as creds from '../config.json';
 import async from 'async';
 
 let doc = new GoogleSpreadsheet(process.env.workSheet)
