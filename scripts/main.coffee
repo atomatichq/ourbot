@@ -14,7 +14,7 @@ module.exports = (robot) ->
   messages.setAuth((err, res) -> {
       if(err) console.log(err)
       console.log("Logged in: " + res[1].title)
-  }
+  })
 
 
   robot.hear /\+todo/i, (res) ->
