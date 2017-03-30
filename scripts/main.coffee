@@ -11,9 +11,11 @@
 module.exports = (robot) ->
 
   messages = require('./messages.js').messages
-  messages.setAuth((err, res) ->
+  messages.setAuth((err, res) -> {
       if(err) console.log(err)
       console.log("Logged in: " + res[1].title))
+  }
+
 
   robot.hear /\+todo/i, (res) ->
       messages.sendMessage(res.message, (r) ->
