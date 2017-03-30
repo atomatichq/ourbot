@@ -3,7 +3,7 @@ var chai = require ('chai')
 
 var expect = chai.expect
 
-var helper = new Helper('../scripts/example.coffee')
+var helper = new Helper('../scripts/main.coffee')
 
 describe('example', function () {
     beforeEach(function () {
