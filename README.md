@@ -156,6 +156,18 @@ __Gitter__
 2. Click Sign in and authorize
 3. You will be redirected in private area where you can find your API key, COPY IT!
 
+
+__ENV__
+
+.env file in root directory should have this structure
+
+```
+PRIVATE_KEY="<PRIVATE_KEY>"
+CLIENT_EMAIL="<CLIENT_EMAIL>"
+WORKSHEET="<WORKSHEET_WORK_WITH>"
+
+```
+
 __Hubot and Heroku__
 1. In *Procfile* you need to specify launch code for heroku
 ```
