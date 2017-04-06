@@ -9,22 +9,23 @@
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
 module.exports = (robot) ->
-
-  console.log(process.env.private_key)
+    
   messages = require('./messages.js').messages
   messages.setAuth((err, res) ->
-    if(err) console.log(err)
       console.log("Logged in: " + res[1].title)
   )
 
-
-  robot.hear /\+todo/i, (res) ->
+  robot.hear conf.keys, (res) ->
       messages.sendMessage(res.message, (r) ->
           console.log("Added at: " + r.updated))
 
-  robot.hear /\+standup/i, (res) ->
-      messages.sendMessage(res.message, (r) ->
-          console.log("Added at: " + r.updated))
+  # robot.hear /\+todo/i, (res) ->
+  #     messages.sendMessage(res.message, (r) ->
+  #         console.log("Added at: " + r.updated))
+  #
+  # robot.hear /\+standup/i, (res) ->
+  #     messages.sendMessage(res.message, (r) ->
+  #         console.log("Added at: " + r.updated))
     # messageText = res.message.text.indexOf(' ')+1
     # assignees = res.message.text.substr(messageText).match(/(@.*\s)/)
     # if !assignees
