@@ -102,16 +102,14 @@ This will then match +todo and log to gist1 doc.
   - your JSON key file is generated and downloaded to your machine (__it is the only copy!__)
   - note your service account's email address (also available in the JSON key file)
 5. Share the doc (or docs) with your service account using the email noted above
-6. Copy content of JSON key file in to config.json
 
 ### Environment Variables
-1. Open ```.env.example``` then, set all your sensetive varriables:
+1. Rename ```.env.example``` to ```.env``` and set variables:
 ```
-PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n<PRIVATE_KEY_CONTENT>\n-----END PRIVATE KEY-----\n"
-CLIENT_EMAIL="example_email@developer.gserviceaccount.com"
-WORKSHEET="sampleIdOfWorksheetww8Wer6Qw8hq8we"
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n<PRIVATE_KEY_CONTENT>\n-----END PRIVATE KEY-----\n"
+GOOGLE_CLIENT_EMAIL="example_email@developer.gserviceaccount.com"
+GOOGLE_WORKSHEET="sampleIdOfWorksheetww8Wer6Qw8hq8we"
 ```
-2. Rename ```.env.example``` to ```.env```
 
 ## Deployment
 
