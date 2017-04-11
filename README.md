@@ -104,7 +104,7 @@ This will then match +todo and log to gist1 doc.
 5. Share the doc (or docs) with your service account using the email noted above
 
 ### Environment Variables
-1. Rename ```.env.example``` to ```.env``` and set variables:
+1. Rename ```env.example``` to ```.env``` and set variables:
 ```
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n<PRIVATE_KEY_CONTENT>\n-----END PRIVATE KEY-----\n"
 GOOGLE_CLIENT_EMAIL="example_email@developer.gserviceaccount.com"
