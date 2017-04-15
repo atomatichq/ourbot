@@ -2,14 +2,21 @@
     "docs": {
         "gdoc1": {
             "fun": "sendMessage"
+        },
+        "gist1": {
+            "fun": "sendGist"
         }
     },
     "monitor": {
         "+todo": {
             "action": "log",
-            "dest": "gdoc1"
+            "dest": "gist1"
         },
         "+standup": {
+            "action": "log",
+            "dest": "gdoc1"
+        },
+        "+example": {
             "action": "log",
             "dest": "gdoc1"
         }
