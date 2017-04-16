@@ -1,3 +1,5 @@
+import Gists from 'gists'
+import GoogleSpreadsheet from 'google-spreadsheet'
 import async from 'async'
 import chai from 'chai'
 import sinon from 'sinon'
@@ -5,36 +7,42 @@ let messages = require('../scripts/messages.js').messages
 
 
 describe('Google Docs and Gists Logging', function () {
-    it('Google Docs messaging', function () {
-        let message = {
-            "text": "+todo testing @test",
-            "user": {
-                "name": "test"
-            }
-        }
-        sinon.stub(messages, "sendMessage", function () {
-            return "0"
-        })
+    let save
 
-        messages.sendMessage(message, "dest", function (inf) {})
-
-        sinon.assert.calledOnce(messages.sendMessage)
-
+    beforeEach(function () {
+        save = null
     })
 
-    it('Gist messaging', function () {
-        let message = {
-            "text": "+todo testing @test",
-            "user": {
-                "name": "test"
-            }
-        }
-        sinon.stub(messages, "sendGist", function () {
-            return "0"
+    it('GDoc Logging', function () {
+        save = sinon.stub(messages, 'formatMessage').callsFake(function (message, callback) {
+            sinon.assert.calledOnce(save)
+        })
+        messages.sendMessage({"text": "+todo @test this", "user":{"name": "test", "login": "test"}}, "gdoc", function (data) {
+
+        })
+        save.reset()
+    })
+
+    it('Formatting message', function () {
+        save = sinon.stub(messages, 'getRoom').callsFake(function (roomId, callback) {
+            sinon.assert.calledOnce(save)
+            callback("testname")
         })
 
-        messages.sendGist(message, "dest", function (inf) {})
-
-        sinon.assert.calledOnce(messages.sendGist)
+        messages.formatMessage({"text": "+todo @test this", "room": "testingName", "user": {"name": "test", "login": "test"}}, function (data) {
+        })
+        save.reset()
     })
+
+    it('Gists Logging', function () {
+        save = sinon.stub(new Gists(), 'download').callsFake(function (dest, callback) {
+            sinon.assert.calledOnce(save)
+        })
+
+        messages.sendGist({"text": "+todo @test this", "user":{"name": "test", "login": "test"}}, "gdoc", function (data) {
+
+        })
+        save.reset()
+    })
+
 })
