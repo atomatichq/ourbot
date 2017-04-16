@@ -13,16 +13,6 @@ describe('Google Docs and Gists Logging', function () {
         save = null
     })
 
-    it('GDoc Logging', function () {
-        save = sinon.stub(messages, 'formatMessage').callsFake(function (message, callback) {
-            sinon.assert.calledOnce(save)
-        })
-        messages.sendMessage({"text": "+todo @test this", "user":{"name": "test", "login": "test"}}, "gdoc", function (data) {
-
-        })
-        save.reset()
-    })
-
     it('Formatting message', function () {
         save = sinon.stub(messages, 'getRoom').callsFake(function (roomId, callback) {
             sinon.assert.calledOnce(save)
@@ -30,6 +20,16 @@ describe('Google Docs and Gists Logging', function () {
         })
 
         messages.formatMessage({"text": "+todo @test this", "room": "testingName", "user": {"name": "test", "login": "test"}}, function (data) {
+        })
+        save.reset()
+    })
+
+    it('GDoc Logging', function () {
+        save = sinon.stub(messages, 'formatMessage').callsFake(function (message, callback) {
+            sinon.assert.calledOnce(save)
+        })
+        messages.sendMessage({"text": "+todo @test this", "user":{"name": "test", "login": "test"}}, "gdoc", function (data) {
+
         })
         save.reset()
     })

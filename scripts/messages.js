@@ -79,6 +79,7 @@ let formatMessage = function (message, callback) {
     let msg = message.text
     let action = message.text.match(/\+[^*\s]+/)[0]
     msg = msg.replace(action, '').trim()
+
     if(!msg) return null
     let assignees = message.text.match(/@[^*\s]+/)
     if (!assignees)
@@ -87,9 +88,7 @@ let formatMessage = function (message, callback) {
       assignees = assignees[0].trim()
       msg = msg.replace(assignees, '').trim()
     }
-
     let name = message.user.name.substr(0, message.user.name.indexOf(' '))
-
     getRoom(message.room, function (roomid) {
         callback({
             "action": action.trim().substring(1),
@@ -112,5 +111,8 @@ let getRoom = function (roomId, callback) {
 exports.messages = {
     setAuth: setAuth,
     sendMessage: sendMessage,
-    sendGist: sendGist
+    sendGist: sendGist,
+    formatMessage: formatMessage,
+    formatGist: formatGist,
+    getRoom: getRoom
 };
