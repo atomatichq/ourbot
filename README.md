@@ -130,6 +130,7 @@ GIST_USERNAME="<BOT_USERNAME>"
 
 ### Locally
 
+1. For testing install coffee-script running ``` npm install -g coffee-script ```
 2. Open terminal and go in project folder.
 3. Enter next script:
 ```
