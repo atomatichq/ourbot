@@ -80,26 +80,18 @@ let formatGist = function (message, callback) {
 }
 
 let formatMessage = function (message, callback) {
-    let msg = message.text
-    let action = message.text.match(/\+[^*\s]+/)[0]
-    msg = msg.replace(action, '').trim()
+    let action = getAction(message.text)
+    let assignees = getAssignees(messages.text)
+    let name = getName(message.user.name)
+    let msg = removeFromMessage(message.text, action)
 
-    if(!msg) return null
-    let assignees = message.text.match(/@[^*\s]+/)
-    if (!assignees)
-      assignees = "none"
-    else {
-      assignees = assignees[0].trim()
-      msg = msg.replace(assignees, '').trim()
-    }
-    let name = message.user.name.substr(0, message.user.name.indexOf(' '))
     getRoom(message.room, function (roomid) {
         callback({
-            "action": action.trim().substring(1),
+            "action": action,
             "timestamp": new Date().toISOString(),
             "poster": "@" + message.user.login + " ("+ name +")",
             "assignees": assignees,
-            "message": msg,
+            "message": removeFromMessage(msg, assignees),
             "room": roomid
         })
     })
@@ -112,11 +104,35 @@ let getRoom = function (roomId, callback) {
     })
 }
 
+let getAction = function (text) {
+    let act = text.match(/\+[^*\s]+/)
+    if(act != null) return act[0].trim()
+    return null
+}
+
+let getAssignees = function (text) {
+    let ass = text.match(/@[^*\s]+/)
+    if(ass != null) return ass[0].trim()
+    return "none"
+}
+
+let getName = function (text) {
+    return text.substr(0, text.indexOf(' '))
+}
+
+let removeFromMessage = function (text, rem) {
+    return text.replace(rem, '').trim().replace(/\s+/g, " ")
+}
+
 exports.messages = {
     setAuth: setAuth,
     sendMessage: sendMessage,
     sendGist: sendGist,
     formatMessage: formatMessage,
     formatGist: formatGist,
-    getRoom: getRoom
+    getRoom: getRoom,
+    getAction: getAction,
+    getAssignees: getAssignees,
+    getName: getName,
+    removeFromMessage: removeFromMessage
 };
