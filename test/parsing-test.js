@@ -3,6 +3,7 @@ import chai from 'chai'
 import sinon from 'sinon'
 import assert from 'assert'
 let messages = require('../scripts/messages.js').messages
+let formatting = require('../scripts/formatting.js').formatting
 
 let expect = chai.expect
 
@@ -21,49 +22,35 @@ describe('Messages parsing', function () {
     })
 
     it('Action getting', function () {
-        assert.equal(messages.getAction(msg), "+todo")
+        assert.equal(formatting.getDataMask(msg, /\+[^*\s]+/), "+todo")
     })
 
     it('Action remove from message', function () {
-        assert.equal(messages.removeFromMessage(msg, messages.getAction(msg)), "do @test this one")
+        assert.equal(formatting.removeFromMessage(msg, formatting.getDataMask(msg, /\+[^*\s]+/)), "do @test this one")
     })
 
     it('Assignees getting', function () {
-        assert.equal(messages.getAssignees(msg), "@test")
+        assert.equal(formatting.getDataMask(msg, /\@[^*\s]+/), "@test")
     })
 
     it('Assignees removing from message', function () {
-        assert.equal(messages.removeFromMessage(msg, messages.getAssignees(msg)), "+todo do this one")
+        assert.equal(formatting.removeFromMessage(msg, formatting.getDataMask(msg, /\@[^*\s]+/)), "+todo do this one")
     })
 
     it('Action and Assignees removing from message', function () {
-        let tmp = messages.removeFromMessage(msg, messages.getAction(msg))
-        assert.equal(messages.removeFromMessage(tmp, messages.getAssignees(tmp)), "do this one")
+        let tmp = formatting.removeFromMessage(msg, formatting.getDataMask(msg, /\@[^*\s]+/))
+        assert.equal(formatting.removeFromMessage(tmp, formatting.getDataMask(tmp, /\+[^*\s]+/)), "do this one")
     })
 
     it('Name getting', function () {
-        assert.equal(messages.getName("Test (@test)"), "Test")
+        assert.equal(formatting.getName("Test (@test)"), "Test")
     })
 
-    // it('+todo message', function () {
-    //     save = sinon.stub(messages, 'sendGist').callsFake(function (mess, dest, callback) {
-    //         sinon.assert.calledOnce(save)
-    //     })
-    //     this.room.user.say('alice', '+todo @test do this')
-    // })
-    //
-    // it('+todo message not parsed', function () {
-    //     save = sinon.stub(messages, 'sendGist').callsFake(function (mess, dest, callback) {
-    //
-    //     })
-    //     this.room.user.say('alice', '@test do this')
-    //     sinon.assert.notCalled(save)
-    // })
-    //
-    // it('+standup message', function () {
-    //     save = sinon.stub(messages, 'sendMessage').callsFake(function (mess, dest, callback) {
-    //         sinon.assert.calledOnce(save)
-    //     })
-    //     this.room.user.say('alice', '+standup @test do this')
-    // })
+    it('Message Formatting', function () {
+        sinon.stub(formatting, 'getRoom').resolves({"name": "test"})
+        messages.formatMessage({"text": "+todo do this", "user": {"login":"test", "name": "Test (@Test)"}, "room": "sadqwewqeqw"}, function (res) {
+            assert.equal(res.message, "do this")
+        })
+
+    })
 });
