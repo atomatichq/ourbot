@@ -1,13 +1,7 @@
-import GoogleSpreadsheet from 'google-spreadsheet';
-import * as creds from '../config.json';
-import async from 'async';
 import Gists from 'gists';
 import Gitter from 'node-gitter';
 let formatting = require('./formatting.js').formatting
 let gdocs = require('./gdocs.js').gdocs
-
-let doc
-let worksheetinfo
 
 let gitter = new Gitter(process.env.HUBOT_GITTER2_TOKEN)
 
