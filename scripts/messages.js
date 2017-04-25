@@ -49,7 +49,8 @@ let sendMessage = (message, dest, callback) => {
         doc = new GoogleSpreadsheet(dest)
         setAuth(function (err, info) {
             if(!err) {
-                doc.addRow(worksheetinfo.worksheets[0].id, res, function (err, info) {
+                console.log(doc)
+                doc.addRow(info.worksheets[0].id, res, function (err, info) {
                     if (err) console.log(err)
                     callback(info)
                 })
@@ -64,9 +65,9 @@ let formatGist = (message, callback) => {
     let name = formatting.getName(message.user.name)
     let msg = formatting.removeFromMessage(message.text, action)
 
-    formatting.getRoom(message.room.then(function (room) {
+    formatting.getRoom(message.room).then(function (room) {
         callback(action.substr(1) + ", " + new Date().toISOString() + ", " + "@" + message.user.login + " ("+ name +")" + ", " + room.name +", " + assignees + ", " + formatting.removeFromMessage(msg, assignees))
-    }))
+    })
 }
 
 let formatMessage = (message, callback) => {

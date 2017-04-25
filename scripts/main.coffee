@@ -13,13 +13,14 @@ module.exports = (robot) ->
 
   config = require('../config.json')
   messages = require('./messages.js').messages
+  formatting = require('./formatting.js').formatting
 
   # messages.setAuth((err, res) ->
   #     console.log("Logged in: " + res[1].title)
   # )
 
   robot.hear /.*/i, (res) ->
-      message = messages.getAction(res.message.text)
+      message = formatting.getDataMask(res.message.text, /\+[^*\s]+/)
       for key, val of config.monitor
           if(message != null)
               if(key == message)
