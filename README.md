@@ -1,15 +1,15 @@
 ChatOps Bot for our Gitter Chat Channel
 =======================================
 
-[![Build Status](https://travis-ci.com/weirdGuy/gitterbot.svg?token=eKyEegu8wsqS6HDsxeah&branch=master)](https://travis-ci.com/weirdGuy/gitterbot)
+[![Build Status](https://travis-ci.org/datopian/ourbot.svg?branch=master)](https://travis-ci.org/datopian/ourbot)
 
 Our Hubot-based bot to automate lots of stuff including:
 
 - logging of specific messages from our (gitter) chat channel. See #1
 
-## How to use it
+# How to use it
 
-In your chat channle tag at start, middle or end of a message:
+In your chat channel tag at start, middle or end of a message:
 
 ```
 +todo ...
@@ -18,65 +18,100 @@ In your chat channle tag at start, middle or end of a message:
 ... +todo
 ```
 
-This will get logged to the doc as:
+This will get logged to the Google doc, Gist or both (depends on configuration) with the following format:
 
 ```
-yyyy-mm-ddTHH:MM {message} [from:@{username}]
-
+action, timestamp, poster, assignees, message, room
++todo,yyyy-mm-ddTHH:MM,@{username}(name),@{username},your message,roomname
 ```
 
-## Installation
+# Deploying and Configuring the Bot
 
-You'll need to install coffee-script and hubot to run the app and tests. To install follow here:
+We deploy using Heroku.
 
-```
-npm install -g hubot coffee-script
-```
+1. Configure the app with key config information
+2. Deploy the app to heroku in the normal way - `git push heroku master` (our app name is `datopian-chatbot`)
+3. Setup `hubot-heroku-keepalive` per instructions https://github.com/hubot-scripts/hubot-heroku-keepalive This avoids Heroku putting bot in idle state which stops it listening to the channel.
 
-Install the app:
-```
-# clone the repo
-git clone https://github.com/atomatichq/ourbot.git
-cd ourbot
-npm install
-```
-Run the tests
-```
-npm test
-```
+At this point you should have scheduled time for bot to wake up, but you can do it manually as well, by just visiting https://datopian-chatbot.herokuapp.com/heroku/keepalive
 
-### Configuration
+## Configuration
 
-For running this one you need to do few really quick steps.
+There are two parts to configuration:
 
-#### Configure the bot
+* Behaviour (e.g. where we log stuff) - stored in `config.json` and kept in repo
+* Access permissions for google docs and gists (this info has to be private)
+
+### Behaviour
 
 ```javascript=
 // some of this should be auto loaded from environment variables (so we can config on heroku)
 
 // config.json
 {
-  github_auth:
-  gdocs_auth:
-  docs: {
-    "gist1": {
-      "type": "gist"
-    }
-    "gdocs1": {
-      "type": "gdocs"
-    }
-  }
-  monitor: {
-    "+todo": {
-      "action"": "log",
-      "dest": "gist1"
+    "docs": {
+        "gdoc1": {
+            "fun": "sendMessage",
+            "dest": "gdocid1"
+        },
+        "gist1": {
+            "fun": "sendGist",
+            "dest": "gistid"
+        },
+        "gdoc2": {
+            "fun": "sendMessage",
+            "dest": "gdocid2"
+        }
     },
-    "+standup": ...
-  }
+    "monitor": {
+        "+todo": {
+            "action": "log",
+            "dest": ["gdoc1", "gist1"]
+        },
+        "+standup": {
+            "action": "log",
+            "dest": ["gdoc1"]
+        },
+        "+example": {
+            "action": "log",
+            "dest": ["gdoc2"]
+        }
+    }
 }
 ```
 
-This will then match +todo and log to gist1 doc.
+With the configurations above bot will log `+todo`'s in one of Google docs and Gist,
+`+standup`'s only in Google doc and `+example` in another Google doc
+
+### Access Configuration
+
+Copy the environment variables template to `.env`:
+
+1. Rename ```env.example``` to ```.env``` and set variables:
+```
+GOOGLE_PRIVATE_KEY="<private_key from JSON file you get from Google>"
+GOOGLE_CLIENT_EMAIL=<client_email from JSON file you get from Google>
+HUBOT_GITTER2_TOKEN=<Gitter tocken>
+GIST_USERNAME="<BOT_USERNAME>"
+GIST_PASSWORD="<BOT_PASSWORD>"
+```
+
+Locate values for each of these from the relevant services -- see below for instructions.
+
+Then push this to heroku:
+
+```
+$ heroku config:set VARIABLE_NAME=VaRIabLE
+
+## Note: To set `GOOGLE_PRIVATE_KEY` you will have to remove all `\n`s with actual new lines
+
+$ heroku config:set GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+your
+very
+long
+key
+-----END PRIVATE KEY-----"
+```
 
 #### Gitter
 
@@ -104,31 +139,50 @@ This will then match +todo and log to gist1 doc.
 5. Share the doc (or docs) with your service account using the email noted above
 6. Get Worksheet ID:
     * Open or create google document
-      * Format your document with next columns: action, timestamp, poster, assignees, message
+      * Format your document with next columns: action, timestamp, poster, assignees, message, room
     * Look at URL and find this one section:
     * https://docs.google.com/spreadsheets/d/**15dxhLpRnc1_weGE2rdfSYx7FpQfakbSXrh93cMRIuwsFow**/edit#gid=0
-    * Set it in .env file as: ``` GOOGLE_WORKSHEET="15dxhLpRnc1_weGE2rdfSYx7FpQfakbSXrh93cMRIuwsFow" ```
-
+    * Set it to `dest` property in config.json:
+      ```
+      {
+        "docs": {
+          "gdoc1": {
+              "fun": "sendMessage",
+              "dest": "15dxhLpRnc1_weGE2rdfSYx7FpQfakbSXrh93cMRIuwsFow"
+          },
+          ...
+      }
+      ```
 
 ### Gists
 
-1. You need to create gist, by the bot account with name "log.txt"
-2. Extract GIST_ID from it's url
-3. Set Environmen Variables for GISTS
+1. You need to create a gist, by the bot account with name "log.txt"
+2. Extract gist id from it's URL
+3. Set it to `dest` property in config.json as shown in example above
 
-### Environment Variables
-1. Rename ```env.example``` to ```.env``` and set variables:
+
+
+# Developer Installation
+
+You'll need to install coffee-script and hubot to run the app and tests. To install follow here:
+
 ```
-GOOGLE_PRIVATE_KEY="<private_key from JSON file you get from Google>"
-GOOGLE_CLIENT_EMAIL=<client_email from JSON file you get from Google>
-GOOGLE_WORKSHEET=<Worksheed ID from URL of Google spreadsheet>
-HUBOT_GITTER2_TOKEN=<Gitter tocken>
-GIST_WORKSHEET="<GIST_ID>"
-GIST_PASSWORD="<BOT_PASSWORD>"
-GIST_USERNAME="<BOT_USERNAME>"
+npm install -g hubot coffee-script
 ```
 
-### Locally
+Install the app:
+```
+# clone the repo
+git clone https://github.com/atomatichq/ourbot.git
+cd ourbot
+npm install
+```
+Run the tests
+```
+npm test
+```
+
+### Run Locally
 
 2. Open terminal and go in project folder.
 3. Enter next script:
@@ -136,25 +190,3 @@ GIST_USERNAME="<BOT_USERNAME>"
   HUBOT_GITTER2_TOKEN=<APIKEY which you get in previous step> bin/hubot -a gitter2 --name ourbot
 ```
 
-### Heroku
-
-Set the environment variables form `.env` for Heroku
-
-```
-$ heroku config:set VARIABLE_NAME=VaRIabLE
-
-## Note: To set `GOOGLE_PRIVATE_KEY` you will have to remove all `\n`s with actual new lines
-
-$ heroku config:set GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
-your
-very
-long
-key
------END PRIVATE KEY-----"
-```
-
-Deploy on heroku
-
-```
-$ git push heroku master
-```
