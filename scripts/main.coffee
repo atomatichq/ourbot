@@ -15,7 +15,6 @@ module.exports = (robot) ->
   messages = require('./messages.js').messages
   formatting = require('./formatting.js').formatting
 
-
   robot.hear /.*/i, (res) ->
       message = formatting.getDataMask(res.message.text, /\+[^*\s]+/)
       for key, val of config.monitor
