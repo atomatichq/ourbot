@@ -30,7 +30,7 @@ let sendMessage = (message, dest, callback) => {
     formatMessage(message, function (res) {
         gdocs.setAuth(dest, function (err, info) {
             if(!err) {
-                gdocs.addRow(info.worksheets[0].id, res, function (err, info) {
+                gdocs.addRow(info[1].worksheets[0].id, res, function (err, info) {
                     if (err) console.log(err)
                     callback(info)
                 })
