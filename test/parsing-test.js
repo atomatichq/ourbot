@@ -76,7 +76,7 @@ describe('Messages parsing', function () {
 
     it('Gist formatting', function () {
         messages.formatGist({"text": "+todo do this", "user": {"login":"test", "name": "Test (@Test)"}, "room": "sadqwewqeqw"}, function (res) {
-            assert.equal(res.substr(0, 6), "todo, ")
+            assert.equal(res.substr(0, 5), "todo,")
         })
     })
 

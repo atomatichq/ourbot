@@ -18,7 +18,7 @@ describe('Google Docs and Gists Logging', function () {
     beforeEach(function () {
         format = sinon.stub(formatting, "getRoom").resolves({"name": "test"})
         auth = sinon.stub(async, "series").callsFake(function (arr, cb) {
-            cb(null, {"worksheets":[{"id":"1"}]})
+            cb(null, [null, {"worksheets":[{"id":"1"}]}])
         })
 
         gitGist = sinon.stub(Github.prototype, "get").callsFake(function (path, data, cb) {
