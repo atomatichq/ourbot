@@ -4,6 +4,7 @@ import async from 'async';
 import Gists from 'gists';
 import Gitter from 'node-gitter';
 let formatting = require('./formatting.js').formatting
+let gdocs = require('./gdocs.js').gdocs
 
 let doc
 let worksheetinfo
@@ -14,25 +15,6 @@ let gists = new Gists({
     username: process.env.GIST_USERNAME,
     password: process.env.GIST_PASSWORD
 })
-
-
-
-let setAuth = (callback) => {
-    async.series([
-        function setAuth(step) {
-            doc.useServiceAccountAuth({
-                "private_key": process.env.GOOGLE_PRIVATE_KEY,
-                "client_email": process.env.GOOGLE_CLIENT_EMAIL
-            }, step);
-        },
-        function getInfoAndWorksheets(step) {
-            doc.getInfo(function(err, info) {
-                worksheetinfo = info
-                step(null, worksheetinfo)
-            });
-        }
-    ], callback);
-}
 
 let sendGist = (message, dest, callback) => {
     gists.download({id: dest }, function(err, res) {
@@ -46,11 +28,9 @@ let sendGist = (message, dest, callback) => {
 
 let sendMessage = (message, dest, callback) => {
     formatMessage(message, function (res) {
-        doc = new GoogleSpreadsheet(dest)
-        setAuth(function (err, info) {
+        gdocs.setAuth(dest, function (err, info) {
             if(!err) {
-                console.log(doc)
-                doc.addRow(info.worksheets[0].id, res, function (err, info) {
+                gdocs.addRow(info.worksheets[0].id, res, function (err, info) {
                     if (err) console.log(err)
                     callback(info)
                 })
@@ -66,7 +46,7 @@ let formatGist = (message, callback) => {
     let msg = formatting.removeFromMessage(message.text, action)
 
     formatting.getRoom(message.room).then(function (room) {
-        callback(action.substr(1) + ", " + new Date().toISOString() + ", " + "@" + message.user.login + " ("+ name +")" + ", " + room.name +", " + assignees + ", " + formatting.removeFromMessage(msg, assignees))
+        callback(action.substr(1) + "," + new Date().toISOString() + "," + "@" + message.user.login + " ("+ name +")" + "," + room.name +"," + assignees + "," + formatting.removeFromMessage(msg, assignees))
     })
 }
 
@@ -90,7 +70,6 @@ let formatMessage = (message, callback) => {
 
 
 exports.messages = {
-    setAuth: setAuth,
     sendMessage: sendMessage,
     sendGist: sendGist,
     formatMessage: formatMessage,

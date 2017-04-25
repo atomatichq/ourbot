@@ -13,19 +13,22 @@ let helper = new Helper('../scripts/main.coffee')
 describe('Messages parsing', function () {
     let msg
     let room
-    let a
-    let b
+    let sendMsg
+    let sendGst
+    let getRoom
     beforeEach(function () {
-        a = sinon.stub(messages, "sendMessage")
-        b = sinon.stub(messages, "sendGist")
+        sendMsg = sinon.stub(messages, "sendMessage")
+        sendGst = sinon.stub(messages, "sendGist")
+        getRoom = sinon.stub(formatting, 'getRoom').resolves({"name": "test"})
         room = helper.createRoom()
         msg = "+todo do @test this one"
     })
 
     afterEach(function () {
         room.destroy()
-        a.restore()
-        b.restore()
+        sendMsg.restore()
+        sendGst.restore()
+        getRoom.restore()
     })
 
     it('Action getting', function () {
@@ -54,27 +57,21 @@ describe('Messages parsing', function () {
     })
 
     it('Message Formatting', function () {
-        let t = sinon.stub(formatting, 'getRoom').resolves({"name": "test"})
         messages.formatMessage({"text": "+todo do this", "user": {"login":"test", "name": "Test (@Test)"}, "room": "sadqwewqeqw"}, function (res) {
             assert.equal(res.message, "do this")
         })
-        t.restore()
     })
 
     it('Message Formatting, with tag in middle', function () {
-        let t = sinon.stub(formatting, 'getRoom').resolves({"name": "test"})
         messages.formatMessage({"text": "do +todo this", "user": {"login":"test", "name": "Test (@Test)"}, "room": "sadqwewqeqw"}, function (res) {
             assert.equal(res.action, "todo")
         })
-        t.restore()
     })
 
     it('Message Formatting, with tag in the end', function () {
-        let t = sinon.stub(formatting, 'getRoom').resolves({"name": "test"})
         messages.formatMessage({"text": "do this +todo", "user": {"login":"test", "name": "Test (@Test)"}, "room": "sadqwewqeqw"}, function (res) {
             assert.equal(res.action, "todo")
         })
-        t.restore()
     })
 
     it('Gist formatting', function () {
@@ -85,36 +82,36 @@ describe('Messages parsing', function () {
 
     it('Typo in tag', function () {
         room.user.say('weirdguy', "+tod do this one").then(function () {
-            assert.equal(a.callCount, 0)
-            assert.equal(b.callCount, 0)
+            assert.equal(sendMsg.callCount, 0)
+            assert.equal(sendGst.callCount, 0)
         })
     })
 
     it('Without typo in tag', function () {
         room.user.say('weirdguy', "+todo do this one").then(function () {
-            assert.equal(a.callCount, 1)
-            assert.equal(b.callCount, 1)
+            assert.equal(sendMsg.callCount, 1)
+            assert.equal(sendGst.callCount, 1)
         })
     })
 
     it('Without any tag', function () {
         room.user.say('weirdguy', "do this one").then(function () {
-            assert.equal(a.callCount, 0)
-            assert.equal(b.callCount, 0)
+            assert.equal(sendMsg.callCount, 0)
+            assert.equal(sendGst.callCount, 0)
         })
     })
 
     it('Tag in middle', function () {
         room.user.say('weirdguy', "do +todo this one").then(function () {
-            assert.equal(a.callCount, 1)
-            assert.equal(b.callCount, 1)
+            assert.equal(sendMsg.callCount, 1)
+            assert.equal(sendGst.callCount, 1)
         })
     })
 
     it('Tag in the end', function () {
         room.user.say('weirdguy', "do this one +todo").then(function () {
-            assert.equal(a.callCount, 1)
-            assert.equal(b.callCount, 1)
+            assert.equal(sendMsg.callCount, 1)
+            assert.equal(sendGst.callCount, 1)
         })
     })
 });

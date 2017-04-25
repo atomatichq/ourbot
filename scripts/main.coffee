@@ -15,9 +15,6 @@ module.exports = (robot) ->
   messages = require('./messages.js').messages
   formatting = require('./formatting.js').formatting
 
-  # messages.setAuth((err, res) ->
-  #     console.log("Logged in: " + res[1].title)
-  # )
 
   robot.hear /.*/i, (res) ->
       message = formatting.getDataMask(res.message.text, /\+[^*\s]+/)
