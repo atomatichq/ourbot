@@ -4,6 +4,7 @@ import sinon from 'sinon'
 import assert from 'assert'
 let messages = require('../scripts/messages.js').messages
 let formatting = require('../scripts/formatting.js').formatting
+let milestone = require('../scripts/milestone.js')
 
 let expect = chai.expect
 
@@ -16,7 +17,15 @@ describe('Messages parsing', function () {
     let sendMsg
     let sendGst
     let getRoom
+    let createMilestone
+    let createMilestoneAll
+    let closeMilestone
+    let closeMilestoneAll
     beforeEach(function () {
+        createMilestone = sinon.stub(milestone, "createMilestone")
+        createMilestoneAll = sinon.stub(milestone, "createMilestoneAll")
+        closeMilestone = sinon.stub(milestone, "closeMilestone")
+        closeMilestoneAll = sinon.stub(milestone, "closeMilestoneAll")
         sendMsg = sinon.stub(messages, "sendMessage")
         sendGst = sinon.stub(messages, "sendGist")
         getRoom = sinon.stub(formatting, 'getRoom').resolves({"name": "test"})
@@ -26,10 +35,105 @@ describe('Messages parsing', function () {
 
     afterEach(function () {
         room.destroy()
+        createMilestone.restore()
+        createMilestoneAll.restore()
+        closeMilestone.restore()
+        closeMilestoneAll.restore()
         sendMsg.restore()
         sendGst.restore()
         getRoom.restore()
     })
+  
+    it('create milestion', function () {
+        return room.user.say('mikanebu', "bot create milestone 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(createMilestone.callCount, 1)
+        })
+    })
+    it('create milestion with typo', function () {
+        return room.user.say('mikanebu', "bot create milestones 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(createMilestone.callCount, 0)
+        })
+    })
+    it('create milestion with invalid format', function () {
+        return room.user.say('mikanebu', "bot milestone 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(createMilestone.callCount, 0)
+        })
+    })
+    it('create milestion with invalid title format', function () {
+        return room.user.say('mikanebu', "bot create milestone 13 XYZ 2018 datahq/docs").then(function () {
+            assert.equal(createMilestone.callCount, 0)
+            assert.equal(room.messages[1][1], "@mikanebu Title format is invalid")
+            assert.equal((room.messages).length, 2)
+        })
+    })
+    
+    it('create milestion all', function () {
+        return room.user.say('mikanebu', "bot create milestone 13 Jan 2018").then(function () {
+            assert.equal(createMilestoneAll.callCount, 1)
+        })
+    })
+    it('create milestion all with typo', function () {
+        return room.user.say('mikanebu', "bot created milestone 13 Jan 2018").then(function () {
+            assert.equal(createMilestoneAll.callCount, 0)
+        })
+    })
+    it('create milestion all with invalid format', function () {
+        return room.user.say('mikanebu', "bot milestone 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(createMilestoneAll.callCount, 0)
+        })
+    })
+    it('create milestion All with invalid title format', function () {
+        return room.user.say('mikanebu', "bot create milestone 13 XYZ 2018").then(function () {
+            assert.equal(createMilestoneAll.callCount, 0)
+            assert.equal(room.messages[1][1], "@mikanebu Title format is invalid")
+            assert.equal((room.messages).length, 2)
+        })
+    })
+    it('close milestion', function () {
+        return room.user.say('mikanebu', "bot close milestone 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(closeMilestone.callCount, 1)
+        })
+    })
+    it('close milestion with typo', function () {
+        return room.user.say('mikanebu', "bot2 close milestone 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(closeMilestone.callCount, 0)
+        })
+    })
+    it('close milestion with invalid format', function () {
+        return room.user.say('mikanebu', "bot close milestone test 13 Jan 2018 datahq/docs").then(function () {
+            assert.equal(closeMilestone.callCount, 0)
+        })
+    })
+    it('close milestion with invalid title format', function () {
+        return room.user.say('mikanebu', "bot create milestone 13 XYZ 2018").then(function () {
+            assert.equal(closeMilestone.callCount, 0)
+            assert.equal(room.messages[1][1], "@mikanebu Title format is invalid")
+            assert.equal((room.messages).length, 2)
+        })
+    })
+    it('close milestion all', function () {
+        return room.user.say('mikanebu', "bot close milestone 13 Jan 2018").then(function () {
+            assert.equal(closeMilestoneAll.callCount, 1)
+        })
+    })
+    it('close milestion all with typo', function () {
+        return room.user.say('mikanebu', "bot closing milestone 13 Jan 2018").then(function () {
+            assert.equal(createMilestoneAll.callCount, 0)
+        })
+    })
+    it('create milestion all with invalid format', function () {
+        return room.user.say('mikanebu', "bot milestone 13 Jan 2018 datahq/docs all").then(function () {
+            assert.equal(createMilestoneAll.callCount, 0)
+        })
+    })
+    it('close milestion all with invalid title format', function () {
+        return room.user.say('mikanebu', "bot create milestone 13 XYZ 2018").then(function () {
+            assert.equal(closeMilestoneAll.callCount, 0)
+            assert.equal(room.messages[1][1], "@mikanebu Title format is invalid")
+            assert.equal((room.messages).length, 2)
+        })
+    })
+    
     it('return +todo gdocs url', function () {
       return room.user.say('mikanebu', "bot todos").then(function () {
         assert.equal(room.messages[1][1].substr(0, 14), "@mikanebu http")
