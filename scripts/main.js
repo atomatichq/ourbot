@@ -13,7 +13,8 @@ module.exports = (robot) => {
     let config = require('../config.json')
     let messages = require('./messages.js').messages
     let formatting = require('./formatting.js').formatting
-
+    let {createMilestone, createMilestoneAll,closeMilestone,closeMilestoneAll} = require("./milestone.js")
+    let moment = require('moment')
     robot.hear(/.*/i, (res) => {
         let key, val, de, ref
         let message = formatting.getDataMask(res.message.text, /\+[^*\s]+/)
@@ -31,6 +32,65 @@ module.exports = (robot) => {
             }
         }
     })
+    
+    robot.hear(/bot create milestone|bot close milestone/i, (res) => {
+        var message = res.message.text
+        message = message.split(' ')
+        if(message.length === 7 && message[0] === "bot" && message[1] === "create" && message[2] === "milestone") {
+          var repos = message[6]
+          repos = repos.split('/')
+          var title = message[3]+" "+message[4]+" "+message[5]
+          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
+          if(myDate == "Invalid Date") {
+            res.reply("Title format is invalid")
+          }
+          else {
+            createMilestone(repos[0], repos[1], title, myDate)
+            res.reply("Milestone successfully created at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
+          }
+        }
+        else if(message.length === 7 && message[0] === "bot" && message[1] === "close" && message[2] === "milestone") {
+          var repos = message[6]
+          repos = repos.split('/')
+          var title = message[3]+" "+message[4]+" "+message[5]
+          title = "Sprint - "+title
+          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
+          if(myDate == "Invalid Date") {
+            res.reply("Title format is invalid")
+          }
+          else {
+            closeMilestone(repos[0], repos[1], title)
+            res.reply("Milestone successfully closed at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
+          }
+        }
+        
+        else if(message.length === 6 && message[0] === "bot" && message[1] === "close" && message[2] === "milestone") {
+          var title = message[3]+" "+message[4]+" "+message[5]
+          title = "Sprint - "+title
+          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
+          if(myDate == "Invalid Date") {
+            res.reply("Title format is invalid")
+          }
+          else {
+            closeMilestoneAll(title)
+            res.reply("Milestones successfully closed")
+          }
+        }
+        else if(message.length === 6 && message[0] === "bot" && message[1] === "create" && message[2] === "milestone"){
+          var title = message[3]+" "+message[4]+" "+message[5]
+          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
+          if(myDate == "Invalid Date") {
+            res.reply("Title format is invalid")
+          }
+          else {
+            createMilestoneAll(title, myDate)
+            res.reply("Milestones successfully created")
+          }
+        }
+    })
+    
+ 
+    
     robot.hear(/bot help|bot/i, (res) => {
         var message = res.message.text
         message = message.split(' ')
