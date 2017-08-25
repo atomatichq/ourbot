@@ -132,7 +132,7 @@ module.exports = (robot) => {
     })
     
     robot.hear(/bot help|bot/i, (res) => {
-        var message = res.message.text
+        let message = res.message.text
         message = message.split(' ')
         if(message.length === 1 && (message[0] === "bot" || message[0] === "/bot")){
             res.reply("Hi, I'm your helpful chatops bot! Please, see README for the usage https://github.com/datopian/ourbot#commands\n+todo - get logged to the Google doc, Gist\n +standup - get logged to the Google doc, Gist")
@@ -143,7 +143,7 @@ module.exports = (robot) => {
     })
     
     robot.hear(/bot todos/i, (res) => {
-        var message = res.message.text
+        let message = res.message.text
         message = message.split(' ')
         if(message.length === 2) {
             res.reply("https://docs.google.com/spreadsheets/d/"+process.env.GOOGLE_WORKSHEET)
