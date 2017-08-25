@@ -13,7 +13,7 @@ module.exports = (robot) => {
     let config = require('../config.json')
     let messages = require('./messages.js').messages
     let formatting = require('./formatting.js').formatting
-    let {createMilestone, createMilestoneAll,closeMilestone,closeMilestoneAll} = require("./milestone.js")
+    let {createMilestone,closeMilestone} = require("./milestone.js")
     let moment = require('moment')
     robot.hear(/.*/i, (res) => {
         let key, val, de, ref
@@ -33,63 +33,103 @@ module.exports = (robot) => {
         }
     })
     
-    robot.hear(/bot create milestone|bot close milestone/i, (res) => {
-        var message = res.message.text
+    robot.hear(/bot create milestone/i, (res) => {
+        let message = res.message.text
         message = message.split(' ')
-        if(message.length === 7 && message[0] === "bot" && message[1] === "create" && message[2] === "milestone") {
-          var repos = message[6]
-          repos = repos.split('/')
-          var title = message[3]+" "+message[4]+" "+message[5]
-          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
-          if(myDate == "Invalid Date") {
-            res.reply("Title format is invalid")
-          }
-          else {
-            createMilestone(repos[0], repos[1], title, myDate)
-            res.reply("Milestone successfully created at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
-          }
-        }
-        else if(message.length === 7 && message[0] === "bot" && message[1] === "close" && message[2] === "milestone") {
-          var repos = message[6]
-          repos = repos.split('/')
-          var title = message[3]+" "+message[4]+" "+message[5]
-          title = "Sprint - "+title
-          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
-          if(myDate == "Invalid Date") {
-            res.reply("Title format is invalid")
-          }
-          else {
-            closeMilestone(repos[0], repos[1], title)
-            res.reply("Milestone successfully closed at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
-          }
-        }
-        
-        else if(message.length === 6 && message[0] === "bot" && message[1] === "close" && message[2] === "milestone") {
-          var title = message[3]+" "+message[4]+" "+message[5]
-          title = "Sprint - "+title
-          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
-          if(myDate == "Invalid Date") {
-            res.reply("Title format is invalid")
-          }
-          else {
-            closeMilestoneAll(title)
-            res.reply("Milestones successfully closed")
-          }
-        }
-        else if(message.length === 6 && message[0] === "bot" && message[1] === "create" && message[2] === "milestone"){
-          var title = message[3]+" "+message[4]+" "+message[5]
-          const myDate = moment(title, 'DD-MMM-YYYY').toDate()
-          if(myDate == "Invalid Date") {
-            res.reply("Title format is invalid")
-          }
-          else {
-            createMilestoneAll(title, myDate)
-            res.reply("Milestones successfully created")
+        if(message[0] === "bot" && message[1] === "create" && message[2] === "milestone") {
+          switch(message.length) {
+            case 7: 
+              let repos = message[6]
+              repos = repos.split('/')
+              let title = "Sprint - "+message[3]+" "+message[4]+" "+message[5]
+              let myDate = moment(title, 'DD-MMM-YYYY').toDate()
+              if(myDate == "Invalid Date") {
+                res.reply("Title format is invalid")
+              }
+              else {
+                createMilestone(title, myDate, repos[0], repos[1])
+                res.reply("Milestone successfully created at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
+              }
+              break;
+            case 6:
+              title = "Sprint - "+message[3]+" "+message[4]+" "+message[5]
+              myDate = moment(title, 'DD-MMM-YYYY').toDate()
+              if(myDate == "Invalid Date") {
+                res.reply("Title format is invalid")
+              }
+              else {
+                createMilestone(title, myDate)
+                res.reply("Milestones successfully created")
+              }
+              break;
+            case 5:
+              repos = message[4]
+              repos = repos.split('/')
+              title = message[3]
+              if(title == "Icebox" || title == "Backlog") {
+                createMilestone(title,myDate, repos[0], repos[1])
+                res.reply("Milestone successfully created at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
+              }
+              break;
+            case 4:
+              title = message[3]
+              if(title == "Icebox" || title == "Backlog") {
+                createMilestone(title,myDate)
+                res.reply("Milestones successfully created")
+              }
+              break;
           }
         }
     })
     
- 
+    robot.hear(/bot close milestone/i, (res) => {
+      let message = res.message.text
+      message = message.split(' ')
+      if(message[0] === "bot" && message[1] === "close" && message[2] === "milestone") {
+        switch(message.length) {
+          case 7:
+            let repos = message[6]
+            repos = repos.split('/')
+            let title = "Sprint - "+message[3]+" "+message[4]+" "+message[5]
+            let myDate = moment(title, 'DD-MMM-YYYY').toDate()
+            if(myDate == "Invalid Date") {
+              res.reply("Title format is invalid")
+            }
+            else {
+              closeMilestone(title, repos[0], repos[1])
+              res.reply("Milestone successfully closed at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
+            }
+            break;
+          case 6:
+            title = "Sprint - "+message[3]+" "+message[4]+" "+message[5]
+            myDate = moment(title, 'DD-MMM-YYYY').toDate()
+            if(myDate == "Invalid Date") {
+              res.reply("Title format is invalid")
+            }
+            else {
+              closeMilestone(title)
+              res.reply("Milestones successfully closed")
+            }
+            break;
+          case 5:
+            title = message[3]
+            repos = message[4]
+            repos = repos.split('/')
+            if(title == "Icebox" || title == "Backlog") {
+              closeMilestone(title, repos[0], repos[1])
+              res.reply("Milestone successfully created at 'https://github.com/"+repos[0]+"/"+repos[1]+"/milestones")
+            }
+            break;
+          case 4:
+            title = message[3]
+            if(title == "Icebox" || title == "Backlog") {
+              closeMilestone(title)
+              res.reply("Milestones successfully closed")
+            }
+            break;
+        }
+      }
+    })
     
     robot.hear(/bot help|bot/i, (res) => {
         var message = res.message.text
@@ -101,6 +141,7 @@ module.exports = (robot) => {
             res.reply("Hi, I'm your helpful chatops bot! Please, see README for the usage https://github.com/datopian/ourbot#commands\n+todo - get logged to the Google doc, Gist\n +standup - get logged to the Google doc, Gist")
           }
     })
+    
     robot.hear(/bot todos/i, (res) => {
         var message = res.message.text
         message = message.split(' ')
@@ -108,6 +149,7 @@ module.exports = (robot) => {
             res.reply("https://docs.google.com/spreadsheets/d/"+process.env.GOOGLE_WORKSHEET)
         }
     })
+    
     robot.error((err, res) => {
         console.log(err)
         robot.logger.error("DOES NOT COMPUTE")

@@ -41,6 +41,7 @@
     "sinon": "^2.1.0"
   },
   "scripts": {
-    "test": "mocha --require coffee-script/register --compilers coffee:coffee-script --compilers js:babel-core/register test/*.js"
+    "test": "mocha --require coffee-script/register --compilers coffee:coffee-script --compilers js:babel-core/register test/*.js",
+    "watch:test": "npm t -- --watch"
   }
 }
