@@ -47,11 +47,6 @@ describe('Messages parsing', function () {
             assert.equal(room.messages[1][1].substr(0, 15), "@mikanebu Issue")
         })
     })
-    it('create issue with typo', function () {
-        return room.user.say('mikanebu', `bot issues "This is test issue" about "We want to test" in "datahq/docs""`).then(function () {
-            assert.equal(createIssue.callCount, 0)
-        })
-    })
     it('+link in the beginning', function () {
         return room.user.say('weirdguy', "+link do this one").then(function () {
             assert.equal(sendMsg.callCount, 1)
