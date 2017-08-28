@@ -18,26 +18,25 @@ To get `help` command, run the following code:
 
 To create and close milestone:
 ```
-bot create milestone title myorg/myrepo
-bot close milestone title myorg/myrepo
+bot create milestone "title" in "myorg/myrepo"
+bot close milestone "title" in "myorg/myrepo"
 ```
 To create and close all milestones listed in `config.json`:
 ```
-bot create milestone title 
-bot close milestone title
+bot create milestone all "title" 
+bot close milestone all "title"
 ```
 `title` - can accept the following values:
 - any date in the format of `DD MMM YYYY`
-- `Backlog`
-- `Icebox` 
-For example: 13 Jan 2017 or Icebox
+- any string
+For example: "13 Jan 2017" or "This is Backlog" 
 
 Examples:
 
 ```
-bot create milestone 15 Sept 2017 datahq/docs
-bot create milestone 15 Sept 2017
-bot create milestone Backlog datahq/docs
+bot create milestone "15 Sept 2017" in "datahq/docs"
+bot create milestone all "15 Sept 2017"
+bot close milestone "Sprint - 15 Sept 2017" in "datahq/docs"
 ```
 
 To get url for todos:
