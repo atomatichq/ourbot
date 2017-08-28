@@ -25,7 +25,6 @@
     },
     "repos": [
       {"owner": "datahq", "repo": "docs"},
-      {"owner": "datahq", "repo": "docs"},
       {"owner": "datahq", "repo": "datahub-cli"},
       {"owner": "datahq", "repo": "frontend"},
       {"owner": "datahq", "repo": "auth"},
