@@ -1,7 +1,7 @@
 ### Commands
 `bot adapter` - Reply with the adapter
 
-`bot create|close milestone all "title"` - Creates milestone for **all repos** listed in `config.json`
+`bot create|close milestone all "title"` - Creates milestone for all repos listed in `config.json`
 `bot create|close milestone "title" in "myorg/myrepo"` - Create and close milestone in the specific github repo
   - *title* - can accept the following values:
     - any date in the format of `DD MMM YYYY`
@@ -12,10 +12,10 @@
   - *title* - the title of the issue
   - *body* - the contents of the issue
 
-`bot links` - Return google spreadsheet url for tag `+link`
+`bot links` - Return Google SpreadSheet url for tag `+link`
 `bot map me <query>` - Returns a map view of the area returned by query.
 `bot the rules` - Make sure hubot still knows the rules.
-`bot todos` - Return google spreadsheet  url for tag `+todo`
+`bot todos` - Return Google SpreadSheet  url for tag `+todo`
 `bot time` - Reply with current time
 `ship it` - Display a motivation squirrel
 `!thank user` - Motivate user 
