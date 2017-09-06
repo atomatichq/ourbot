@@ -59,9 +59,6 @@ let formatMessage = (message, callback) => {
     let assignees = formatting.getDataMask(message.text, /@[^*\s]+/)
     let name = formatting.getName(message.user.name)
     let msg = formatting.removeFromMessage(message.text, action)
-    let blocker = formatting.getStandup(message.text,action, /blockers:(.*)last24/)
-    let last24 = formatting.getStandup(message.text, action, /last24:(.*)next24/)
-    let next24 = formatting.getStandup(message.text, action, /next24:(.*)/)
     formatting.getRoom(message.room).then(function (room) {
         callback({
             "action": action.substr(1),
@@ -70,9 +67,7 @@ let formatMessage = (message, callback) => {
             "assignees": assignees,
             "message": formatting.removeFromMessage(msg, assignees),
             "room": room.name,
-            "blockers": blocker,
-            "last24": last24,
-            "next24": next24
+            "standup": formatting.removeFromMessage(msg, assignees)
         })
     })
 }
