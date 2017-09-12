@@ -54,7 +54,6 @@
     "space": true,
     "semicolon": false,
     "rules": {
-      "no-var": "warn",
       "no-use-before-define": 1,
       "no-await-in-loop": 1,
       "import/prefer-default-export": 1,
