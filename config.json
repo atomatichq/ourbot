@@ -2,7 +2,13 @@
     "docs": {
         "gdoc1": {
             "fun": "sendMessage",
-            "dest": "1w4LBF6wbRNVynAk8cQURyz8yZCbTw5hPwcqr87S46hY"
+            "dest": "1w4LBF6wbRNVynAk8cQURyz8yZCbTw5hPwcqr87S46hY",
+            "room": "Datopian"
+        },
+        "gdoc2": {
+            "fun": "sendMessage",
+            "dest": "1_rUBr0-nfo2zJdcA5DQ0MNqoWZq0djmokvHDYbu_gQA",
+            "room": "Art / Earth / Tech"
         },
         "gist1": {
             "fun": "sendGist",
@@ -12,19 +18,19 @@
     "monitor": {
         "+todo": {
             "action": "log",
-            "dest": ["gdoc1"]
+            "dest": ["gdoc1","gdoc2"]
         },
         "+standup": {
             "action": "log",
-            "dest": ["gdoc1"]
+            "dest": ["gdoc1","gdoc2"]
         },
         "+example": {
             "action": "log",
-            "dest": ["gdoc1"]
+            "dest": ["gdoc1","gdoc2"]
         },
         "+link": {
             "action": "log",
-            "dest": ["gdoc1"]
+            "dest": ["gdoc1","gdoc2"]
         }
     },
     "repos": [
