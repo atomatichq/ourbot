@@ -55,7 +55,7 @@ bot issue "title of the issue" in "datahq/docs"
 ```
 ## Tags
 
-Bot can record channel specified in `config.json` and record into specified Google Spreadsheet, Gist
+Bot can listen to a predefined channels, configured in `config.json`
 
 To get url for todos and links:
 ```
