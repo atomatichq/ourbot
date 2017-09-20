@@ -93,6 +93,18 @@ describe('Messages parsing', () => {
       assert.equal(sendGst.callCount, 0)
     })
   })
+  it('+integrity check', () => {
+    return room.user.say('weirdguy', 'do this one +integrity').then(() => {
+      assert.equal(sendMsg.callCount, 1)
+      assert.equal(sendGst.callCount, 0)
+    })
+  })
+  it('+promise check', () => {
+    return room.user.say('weirdguy', 'do this one +promise').then(() => {
+      assert.equal(sendMsg.callCount, 1)
+      assert.equal(sendGst.callCount, 0)
+    })
+  })
   it('create milestone', () => {
     return room.user.say('mikanebu', `bot create milestone "13 Jan 2018" in "datahq/docs"`).then(() => {
       assert.equal(createMilestone.callCount, 1)
