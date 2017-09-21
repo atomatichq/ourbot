@@ -161,32 +161,28 @@ module.exports = robot => {
                   gdocs.setAuth(gdoc, (err, info) => {
                     if (!err) {
                       info[1].worksheets.forEach(worksheet => {
-                        if (worksheet.title === 'todos' && res.message.text === 'bot todos') {
+                        if ('bot ' + worksheet.title === res.message.text) {
                           const glink = worksheet._links['http://schemas.google.com/visualization/2008#visualizationApi']
                           let gid = glink.split('?')
                           gid = gid[1]
-                          res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
-                        } else if (worksheet.title === 'standups' && res.message.text === 'bot standups') {
-                          const glink = worksheet._links['http://schemas.google.com/visualization/2008#visualizationApi']
-                          let gid = glink.split('?')
-                          gid = gid[1]
-                          res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
-                        } else if (worksheet.title === 'links' && res.message.text === 'bot links') {
-                          const glink = worksheet._links['http://schemas.google.com/visualization/2008#visualizationApi']
-                          let gid = glink.split('?')
-                          gid = gid[1]
-                          res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
-                        } else if (worksheet.title === 'integrities' && res.message.text === 'bot integrities') {
-                          const glink = worksheet._links['http://schemas.google.com/visualization/2008#visualizationApi']
-                          let gid = glink.split('?')
-                          gid = gid[1]
-                          console.log('test')
-                          res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
-                        } else if (worksheet.title === 'promises' && res.message.text === 'bot promises') {
-                          const glink = worksheet._links['http://schemas.google.com/visualization/2008#visualizationApi']
-                          let gid = glink.split('?')
-                          gid = gid[1]
-                          res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
+                          switch (worksheet.title | res.message.text) {
+                            case 'todos' | 'bot todos' :
+                              res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
+                              break
+                            case 'standups' | 'bot standups' :
+                              break
+                            case 'links' | 'bot links' :
+                              res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
+                              break
+                            case 'integrities' | 'bot integrities' :
+                              res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
+                              break
+                            case 'promises' | 'bot promises':
+                              res.reply('https://docs.google.com/spreadsheets/d/' + gdoc + '#' + gid)
+                              break
+                            default:
+                              break
+                          }
                         }
                       })
                     } else {
