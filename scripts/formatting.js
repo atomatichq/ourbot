@@ -19,11 +19,12 @@ const getName = text => {
 }
 
 const removeFromMessage = (text, rem) => {
-  return text.replace(rem, '').trim().replace(/\s+/g, ' ')
+  return text.replace(rem, '').trim().replace(/[^\S\x0a\x0d]+/g, ' ')
 }
 
+
 const getStandup = (text, action, mask) => {
-  text = text.replace(action, '').trim().replace(/\s+/g, ' ')
+  text = text.replace(action, '').trim()
   const standup = text.match(mask)
   if (standup !== null) {
     return standup[1]
