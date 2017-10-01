@@ -166,7 +166,7 @@ describe('Messages parsing', () => {
     })
   })
   it('close milestone with typo', () => {
-    return room.user.say('mikanebu', `bot2 close milestone "13 Jan 2018" in "datahq/docs"`).then(() => {
+    return room.user.say('mikanebu', `bot1 close milestone "13 Jan 2018" in "datahq/docs"`).then(() => {
       assert.equal(closeMilestone.callCount, 0)
     })
   })
