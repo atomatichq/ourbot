@@ -14,7 +14,7 @@
   
 `bot issue "title" in "myorg/myrepo"` - Create an issue without content on github
   - *title* - the title of the issue
-`bot feedbacks` - Return Google SpreadSheet url for tag `+feedback`
+`bot feedback` - Return Google SpreadSheet url for tag `+feedback`
 `bot links` - Return Google SpreadSheet url for tag `+link`
 `bot map me <query>` - Returns a map view of the area returned by query.
 `bot outcomes` - Return Google SpreadSheet url for tag `+outcome`

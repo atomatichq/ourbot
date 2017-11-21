@@ -65,7 +65,7 @@ bot standups
 bot todos
 bot promises
 bot outcomes
-bot feedbacks
+bot feedback
 ```
 
 In your chat channel tag at start, middle or end of a message: `+todo`, `+standup`, `+examples`, `+link`, `+integrity`, `+promise`, `+outcome`, `+feedback`
